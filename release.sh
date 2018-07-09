@@ -2005,6 +2005,33 @@ else
 fi
 
 ###
+### Download external addons
+###
+declare -A extAddOns
+extAddOns=(
+	["BadBoy"]="https://wow.curseforge.com/projects/bad-boy/files/latest"
+	["BadBoy_CCleaner"]="https://wow.curseforge.com/projects/badboy_ccleaner/files/latest"
+	["BadBoy_Guilded"]="https://wow.curseforge.com/projects/badboy_guilded/files/latest"
+	["Bartender4"]="https://www.wowace.com/projects/bartender4/files/latest"
+	["Clique"]="https://wow.curseforge.com/projects/clique/files/latest"
+	["Foglight"]="https://wow.curseforge.com/projects/foglight/files/latest"
+	["Grid2"]="https://www.wowace.com/projects/grid2/files/latest"
+	["KNP"]="https://wow.curseforge.com/projects/kuinameplates/files/latest"
+	["Masque"]="https://www.wowace.com/projects/masque/files/latest"
+	["MSBT"]="https://wow.curseforge.com/projects/mik-scrolling-battle-text/files/latest"
+	["PhanxChat"]="https://wow.curseforge.com/projects/phanxchat/files/latest"
+	["Raven"]="https://wow.curseforge.com/projects/raven/files/latest"
+	["Skada"]="https://www.wowace.com/projects/skada/files/latest"
+)
+
+for addon in "${!extAddOns[@]}"; do
+	echo "$addon - ${extAddOns[$addon]}";
+	wget -q -O "$releasedir/$addon.zip" ${extAddOns[$addon]}
+	unzip "$releasedir/$addon.zip" -d "$releasedir/RealUI/Interface/AddOns"
+	rm "$releasedir/$addon.zip"
+done
+
+###
 ### Process .pkgmeta to perform move-folders actions.
 ###
 

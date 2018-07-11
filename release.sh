@@ -2007,8 +2007,7 @@ fi
 ###
 ### Download external addons
 ###
-declare -A extAddOns
-extAddOns=(
+declare -A extAddOns=(
 	["BadBoy"]="https://wow.curseforge.com/projects/bad-boy/files/latest"
 	["BadBoy_CCleaner"]="https://wow.curseforge.com/projects/badboy_ccleaner/files/latest"
 	["BadBoy_Guilded"]="https://wow.curseforge.com/projects/badboy_guilded/files/latest"
@@ -2023,11 +2022,27 @@ extAddOns=(
 	["Raven"]="https://wow.curseforge.com/projects/raven/files/latest"
 	["Skada"]="https://www.wowace.com/projects/skada/files/latest"
 )
+declare -A extFolders=(
+	["BadBoy"]="BadBoy"
+	["BadBoy_CCleaner"]="BadBoy_CCleaner"
+	["BadBoy_Guilded"]="BadBoy_Guilded"
+	["Bartender4"]="Bartender4"
+	["Clique"]="Clique"
+	["Foglight"]="Foglight"
+	["Grid2"]="Grid2 Grid2LDB Grid2Options Grid2RaidDebuffs Grid2RaidDebuffsOptions"
+	["KNP"]="Kui_Media Kui_Nameplates Kui_Nameplates_Core Kui_Nameplates_Core_Config"
+	["Masque"]="Masque"
+	["MSBT"]="MikScrollingBattleText MSBTOptions"
+	["PhanxChat"]="PhanxChat"
+	["Raven"]="Raven Raven_Options"
+	["Skada"]="Skada"
+)
 
 for addon in "${!extAddOns[@]}"; do
 	echo "$addon - ${extAddOns[$addon]}";
 	wget -q -O "$releasedir/$addon.zip" ${extAddOns[$addon]}
-	unzip "$releasedir/$addon.zip" -d "$releasedir/RealUI/Interface/AddOns"
+	unzip -q "$releasedir/$addon.zip" -d $releasedir
+	contents="$contents ${extFolders[$addon]}"
 	rm "$releasedir/$addon.zip"
 done
 

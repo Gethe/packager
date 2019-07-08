@@ -2007,19 +2007,21 @@ fi
 ###
 ### Download external addons
 ###
-declare -A extAddOns=(
-	["BadBoy"]="https://wow.curseforge.com/projects/bad-boy/files/latest"
-	["BadBoy_CCleaner"]="https://wow.curseforge.com/projects/badboy_ccleaner/files/latest"
-	["BadBoy_Guilded"]="https://wow.curseforge.com/projects/badboy_guilded/files/latest"
-	["Bartender4"]="https://www.wowace.com/projects/bartender4/files/latest"
-	["Clique"]="https://wow.curseforge.com/projects/clique/files/latest"
-	["Grid2"]="https://www.wowace.com/projects/grid2/files/latest"
-	["KNP"]="https://wow.curseforge.com/projects/kuinameplates/files/latest"
-	["Masque"]="https://www.wowace.com/projects/masque/files/latest"
-	["MSBT"]="https://wow.curseforge.com/projects/mik-scrolling-battle-text/files/latest"
-	["PhanxChat"]="https://wow.curseforge.com/projects/phanxchat/files/latest"
-	["Raven"]="https://wow.curseforge.com/projects/raven/files/latest"
-	["Skada"]="https://www.wowace.com/projects/skada/files/latest"
+declare -A WoWI=(
+	["BadBoy"]=8736
+	["BadBoy_CCleaner"]=13526
+	["BadBoy_Guilded"]=16951
+	["Bartender4"]=11190
+	["Clique"]=5108
+	["KNP"]=19390
+	["Masque"]=12097
+	["PhanxChat"]=6323
+	["Raven"]=18242
+)
+declare -A CurseForge=(
+	["Grid2"]=15226
+	["Skada"]=17718
+	["MSBT"]=2450
 )
 declare -A extFolders=(
 	["BadBoy"]="BadBoy"
@@ -2036,10 +2038,36 @@ declare -A extFolders=(
 	["Skada"]="Skada"
 )
 
-for addon in "${!extAddOns[@]}"; do
-	echo "$addon - ${extAddOns[$addon]}";
-	wget -q -O "$releasedir/$addon.zip" ${extAddOns[$addon]}
-	unzip -q "$releasedir/$addon.zip" -d $releasedir
+for addon in "${!WoWI[@]}"; do
+    echo "$addon";
+    url=$(curl -s "https://api.mmoui.com/v3/game/WOW/filedetails/${WoWI[$addon]}.json" | jq '.[0].UIDownload')
+
+    wget -q -O "$releasedir/$addon.zip" "${url//\"}"
+    unzip -q "$releasedir/$addon.zip" -d "$releasedir"
+	contents="$contents ${extFolders[$addon]}"
+    rm "$releasedir/$addon.zip"
+done
+
+for addon in "${!CurseForge[@]}"; do
+	echo "$addon";
+	addonDir="$releasedir/$addon"
+	curl -s "https://addons-ecs.forgesvc.net/api/v2/addon/${CurseForge[$addon]}" -o "$addonDir.json"
+
+	url=
+	length=$(jq ".latestFiles | length" "$addonDir.json")
+	for ((i=0; i<length; ++i)); do
+		releaseType=$(jq ".latestFiles[$i].releaseType" "$addonDir.json")
+		gameVersionFlavor=$(jq ".latestFiles[$i].gameVersionFlavor" "$addonDir.json")
+		isAlternate=$(jq ".latestFiles[$i].isAlternate" "$addonDir.json")
+
+	    if [[ $releaseType = 1 && ${gameVersionFlavor//\"} = wow_retail && $isAlternate = false ]]; then
+	    	url=$(jq ".latestFiles[$i].downloadUrl" "$addonDir.json")
+	    	break
+	    fi
+	done
+
+	wget -q -O "$addonDir.zip" "${url//\"}"
+	unzip -q "$addonDir.zip" -d "$releasedir"
 	contents="$contents ${extFolders[$addon]}"
 	rm "$releasedir/$addon.zip"
 done

@@ -2008,6 +2008,7 @@ fi
 ### Download external addons
 ###
 declare -A WoWI=(
+	["Aurora"]=18589
 	["BadBoy"]=8736
 	["BadBoy_CCleaner"]=13526
 	["BadBoy_Guilded"]=16951
@@ -2024,6 +2025,7 @@ declare -A CurseForge=(
 	["MSBT"]=2450
 )
 declare -A extFolders=(
+	["Aurora"]="Aurora"
 	["BadBoy"]="BadBoy"
 	["BadBoy_CCleaner"]="BadBoy_CCleaner"
 	["BadBoy_Guilded"]="BadBoy_Guilded"

@@ -2016,13 +2016,11 @@ declare -A WoWI=(
 	["Clique"]=5108
 	["KNP"]=19390
 	["Masque"]=12097
-	["PhanxChat"]=6323
 	["Raven"]=18242
 )
 declare -A CurseForge=(
 	["Grid2"]=15226
 	["Skada"]=17718
-	["MSBT"]=2450
 )
 declare -A extFolders=(
 	["Aurora"]="Aurora"
@@ -2034,8 +2032,6 @@ declare -A extFolders=(
 	["Grid2"]="Grid2 Grid2LDB Grid2Options Grid2RaidDebuffs Grid2RaidDebuffsOptions"
 	["KNP"]="Kui_Media Kui_Nameplates Kui_Nameplates_Core Kui_Nameplates_Core_Config"
 	["Masque"]="Masque"
-	["MSBT"]="MikScrollingBattleText MSBTOptions"
-	["PhanxChat"]="PhanxChat"
 	["Raven"]="Raven Raven_Options"
 	["Skada"]="Skada"
 )
